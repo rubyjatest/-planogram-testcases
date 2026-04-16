@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>X-ray Planogram — Test Cases</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #F9F7F4;
+    --surface: #FFFFFF;
+    --surface2: #F2EFE9;
+    --border: #E0DDD6;
+    --border2: #CCCAC3;
+    --text: #1A1917;
+    --text2: #6B6860;
+    --text3: #9B9890;
+    --orange: #D95F02;
+    --orange-bg: #FFF4EC;
+    --orange-border: #F5C49A;
+    --blue: #185FA5;
+    --blue-bg: #EAF2FB;
+    --blue-border: #B5D0F0;
+    --green: #276B1F;
+    --green-bg: #EBF5E8;
+    --green-border: #A8D49D;
+    --amber: #8A5200;
+    --amber-bg: #FFF8E6;
+    --amber-border: #F5D68A;
+    --red: #A32D2D;
+    --red-bg: #FDEEEE;
+    --red-border: #F5AAAA;
+    --purple: #4A3AB0;
+    --purple-bg: #F0EFFE;
+    --purple-border: #C5BCEF;
+    --radius: 8px;
+    --radius-lg: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'IBM Plex Sans Thai', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    gap: 1rem;
+  }
+  .header-left { display: flex; align-items: center; gap: 10px; }
+  .logo-dot {
+    width: 28px; height: 28px;
+    background: var(--orange);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: -0.5px;
+  }
+  .site-title { font-size: 15px; font-weight: 600; color: var(--text); letter-spacing: -0.2px; }
+  .header-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+  .badge {
+    font-size: 11px; font-weight: 500;
+    padding: 2px 9px;
+    border-radius: 20px;
+    letter-spacing: 0.01em;
+  }
+  .badge-orange { background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange-border); }
+  .badge-blue   { background: var(--blue-bg);   color: var(--blue);   border: 1px solid var(--blue-border); }
+  .badge-gray   { background: var(--surface2);  color: var(--text2);  border: 1px solid var(--border); }
+
+  /* ── LAYOUT ── */
+  .main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+
+  /* ── STATS ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+    margin-bottom: 1.5rem;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 14px 18px;
+    box-shadow: var(--shadow);
+  }
+  .stat-card .num { font-size: 28px; font-weight: 600; line-height: 1; margin-bottom: 4px; font-family: 'IBM Plex Mono', monospace; }
+  .stat-card .lbl { font-size: 12px; color: var(--text2); }
+  .num-blue   { color: var(--blue); }
+  .num-green  { color: var(--green); }
+  .num-amber  { color: var(--amber); }
+  .num-red    { color: var(--red); }
+
+  /* ── FILTER BAR ── */
+  .filter-section { margin-bottom: 1.25rem; }
+  .filter-label { font-size: 11px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px; }
+  .filter-group { display: flex; gap: 6px; flex-wrap: wrap; }
+  .filter-btn {
+    font-size: 12px; font-weight: 500;
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+  }
+  .filter-btn:hover { border-color: var(--border2); color: var(--text); background: var(--surface2); }
+  .filter-btn.active { background: var(--text); color: var(--surface); border-color: var(--text); }
+  .filter-btn.active-orange { background: var(--orange-bg); color: var(--orange); border-color: var(--orange-border); }
+  .filter-btn.active-green  { background: var(--green-bg);  color: var(--green);  border-color: var(--green-border); }
+  .filter-btn.active-amber  { background: var(--amber-bg);  color: var(--amber);  border-color: var(--amber-border); }
+  .filter-btn.active-red    { background: var(--red-bg);    color: var(--red);    border-color: var(--red-border); }
+  .filter-btn.active-blue   { background: var(--blue-bg);   color: var(--blue);   border-color: var(--blue-border); }
+  .filter-btn.active-purple { background: var(--purple-bg); color: var(--purple); border-color: var(--purple-border); }
+
+  /* ── SEARCH ── */
+  .search-wrap { position: relative; margin-bottom: 1.25rem; }
+  .search-wrap input {
+    width: 100%;
+    padding: 9px 14px 9px 38px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: 13px;
+    background: var(--surface);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .search-wrap input:focus { border-color: var(--orange); }
+  .search-icon {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    color: var(--text3); pointer-events: none; width: 16px; height: 16px;
+  }
+
+  /* ── SECTION LABEL ── */
+  .section-sep {
+    font-size: 11px; font-weight: 500; color: var(--text3);
+    text-transform: uppercase; letter-spacing: 0.07em;
+    padding: 8px 0 6px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 10px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .count-pill { font-family: 'IBM Plex Mono', monospace; font-size: 11px; background: var(--surface2); padding: 2px 8px; border-radius: 20px; color: var(--text2); border: 1px solid var(--border); }
+
+  /* ── TABLE ── */
+  .tc-table { width: 100%; border-collapse: separate; border-spacing: 0 6px; }
+  .tc-table thead th {
+    font-size: 11px; font-weight: 500; color: var(--text3);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    text-align: left; padding: 0 14px 4px;
+  }
+  .tc-row {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.15s, border-color 0.15s;
+    cursor: pointer;
+  }
+  .tc-row:hover { box-shadow: var(--shadow-md); border-color: var(--border2); }
+  .tc-row.expanded { border-color: var(--orange-border); }
+  .tc-row td { padding: 12px 14px; vertical-align: top; }
+  .tc-row td:first-child { border-radius: var(--radius-lg) 0 0 var(--radius-lg); }
+  .tc-row td:last-child  { border-radius: 0 var(--radius-lg) var(--radius-lg) 0; }
+
+  .col-id { width: 70px; }
+  .col-screen { width: 120px; }
+  .col-title { }
+  .col-type { width: 100px; }
+
+  .tc-id { font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; color: var(--text2); }
+  .tc-title-text { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .tc-sub-text { font-size: 12px; color: var(--text2); }
+  .screen-tag {
+    font-size: 11px; font-weight: 500;
+    padding: 3px 9px; border-radius: 20px;
+    display: inline-block;
+  }
+  .sc-s1 { background: #F0EFFE; color: #4A3AB0; border: 1px solid #C5BCEF; }
+  .sc-s2 { background: #EAF2FB; color: #185FA5; border: 1px solid #B5D0F0; }
+  .sc-s3 { background: #FFF4EC; color: #D95F02; border: 1px solid #F5C49A; }
+  .sc-s4 { background: #EBF5E8; color: #276B1F; border: 1px solid #A8D49D; }
+
+  .type-pill { font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 20px; display: inline-block; }
+  .tp-positive { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-border); }
+  .tp-edge     { background: var(--amber-bg);  color: var(--amber);  border: 1px solid var(--amber-border); }
+  .tp-negative { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-border); }
+
+  /* ── EXPANDED DETAIL ── */
+  .detail-row { display: none; }
+  .detail-row.open { display: table-row; }
+  .detail-inner {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    padding: 14px 18px 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .detail-section-title {
+    font-size: 11px; font-weight: 600; color: var(--text2);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+  .detail-list { padding-left: 0; list-style: none; }
+  .detail-list li {
+    font-size: 13px; color: var(--text);
+    padding: 4px 0 4px 18px;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+  .detail-list li:last-child { border-bottom: none; }
+  .detail-list li::before {
+    content: '';
+    position: absolute; left: 4px; top: 11px;
+    width: 6px; height: 6px; border-radius: 50%;
+  }
+  .steps-list li::before { background: var(--text3); }
+  .expect-list li::before { background: var(--green); }
+
+  /* ── EMPTY STATE ── */
+  .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text2); }
+  .empty-state .emoji { font-size: 2rem; margin-bottom: 8px; }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 12px;
+    color: var(--text3);
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .main { padding: 1rem; }
+    .site-header { padding: 0 1rem; }
+    .detail-inner { grid-template-columns: 1fr; }
+    .col-screen, .col-type { display: none; }
+    .tc-table thead th.hide-sm { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-left">
+      <div class="logo-dot">XP</div>
+      <span class="site-title">X-ray Planogram</span>
+    </div>
+    <div class="header-badges">
+      <span class="badge badge-orange">Journey</span>
+      <span class="badge badge-blue">Mobile App</span>
+      <span class="badge badge-gray">Thai locale</span>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- Stats -->
+  <div class="stats-grid" id="stats-grid">
+    <div class="stat-card"><div class="num num-blue" id="s-total">20</div><div class="lbl">Total cases</div></div>
+    <div class="stat-card"><div class="num num-green" id="s-pos">—</div><div class="lbl">Positive</div></div>
+    <div class="stat-card"><div class="num num-amber" id="s-edge">—</div><div class="lbl">Edge case</div></div>
+    <div class="stat-card"><div class="num num-red" id="s-neg">—</div><div class="lbl">Negative</div></div>
+  </div>
+
+  <!-- Search -->
+  <div class="search-wrap">
+    <svg class="search-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+      <circle cx="6.5" cy="6.5" r="4"/><path d="M10 10l3 3"/>
+    </svg>
+    <input type="text" id="search-input" placeholder="ค้นหา test case..." oninput="applyFilters()" />
+  </div>
+
+  <!-- Filters -->
+  <div class="filter-section">
+    <div class="filter-label">Type</div>
+    <div class="filter-group" id="type-filters">
+      <button class="filter-btn active" data-type="all" onclick="setFilter('type','all',this,'active')">All types</button>
+      <button class="filter-btn" data-type="positive" onclick="setFilter('type','positive',this,'active-green')">Positive</button>
+      <button class="filter-btn" data-type="edge" onclick="setFilter('type','edge',this,'active-amber')">Edge case</button>
+      <button class="filter-btn" data-type="negative" onclick="setFilter('type','negative',this,'active-red')">Negative</button>
+    </div>
+  </div>
+  <div class="filter-section">
+    <div class="filter-label">Screen</div>
+    <div class="filter-group" id="screen-filters">
+      <button class="filter-btn active" data-screen="all" onclick="setFilter('screen','all',this,'active')">All screens</button>
+      <button class="filter-btn" data-screen="S1" onclick="setFilter('screen','S1',this,'active-purple')">S1 – Image view</button>
+      <button class="filter-btn" data-screen="S2" onclick="setFilter('screen','S2',this,'active-blue')">S2 – Trigger</button>
+      <button class="filter-btn" data-screen="S3" onclick="setFilter('screen','S3',this,'active-orange')">S3 – Mode picker</button>
+      <button class="filter-btn" data-screen="S4" onclick="setFilter('screen','S4',this,'active-green')">S4 – Result</button>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="section-sep">
+    <span>Test cases</span>
+    <span class="count-pill" id="showing-count">20 / 20</span>
+  </div>
+
+  <table class="tc-table" id="tc-table">
+    <thead>
+      <tr>
+        <th class="col-id">ID</th>
+        <th class="col-screen hide-sm">Screen</th>
+        <th class="col-title">Test case</th>
+        <th class="col-type hide-sm">Type</th>
+      </tr>
+    </thead>
+    <tbody id="tc-tbody"></tbody>
+  </table>
+
+  <div class="empty-state" id="empty-state" style="display:none;">
+    <div class="emoji">🔍</div>
+    <p>ไม่พบ test case ที่ตรงกับเงื่อนไข</p>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  X-ray Planogram Test Cases &nbsp;·&nbsp; [Journey] &nbsp;·&nbsp; Generated with Claude
+</footer>
+
+<script>
+const CASES = [
+  { id:'TC-01', screen:'S1', type:'positive',
+    title:'Access to image view', sub:'UX entry point from shelf list',
+    steps:['Open shelf list (พื้นที่ชั้นวาง)','Tap a shelf record (รูปที่ 1-2)','Image viewer screen loads'],
+    expect:['Full-screen shelf photo renders','Navigation back arrow visible','Date/time label shows (15 ม.ค. 25 12:12 น.)','Record label "รูปที่ 1-2" displayed','Bottom action bar with X-ray button present'] },
+
+  { id:'TC-02', screen:'S1', type:'edge',
+    title:'Image loading failure', sub:'Network or CDN error on image fetch',
+    steps:['Open shelf image with no/slow network','Image fetch times out'],
+    expect:['Error placeholder shown instead of broken img','Retry option available','Bottom action bar still rendered (not blocked)'] },
+
+  { id:'TC-03', screen:'S1', type:'positive',
+    title:'Paginate between photos', sub:'รูปที่ 1-1 / 1-2 navigation',
+    steps:['Open shelf with multiple photos','Swipe or tap prev/next','Navigate to record 1-1'],
+    expect:['Record label updates to "รูปที่ 1-1"','Image swaps correctly','X-ray button remains accessible on each page'] },
+
+  { id:'TC-04', screen:'S2', type:'positive',
+    title:'Trigger X-ray analysis', sub:'Tap action button → processing state',
+    steps:['On image view tap the X-ray/report icon at bottom-left','System initiates analysis'],
+    expect:['"กำลังประมวลผล" spinner shown','Icon changes to active/orange state','UI non-interactive during processing','Progress indicator visible'] },
+
+  { id:'TC-05', screen:'S2', type:'edge',
+    title:'Analysis times out', sub:'Server does not respond within threshold',
+    steps:['Trigger X-ray analysis','Wait beyond timeout (e.g. 30 s)'],
+    expect:['Timeout/error message shown','Option to retry displayed','UI returns to tappable state'] },
+
+  { id:'TC-06', screen:'S2', type:'negative',
+    title:'Double-tap action button', sub:'Prevent duplicate API calls',
+    steps:['Tap X-ray button','Tap again before processing completes'],
+    expect:['Second tap is ignored or debounced','Only one API call is sent','Spinner remains; no duplicate requests'] },
+
+  { id:'TC-07', screen:'S3', type:'positive',
+    title:'Display mode picker opens', sub:'"เลือกหน้าจอแสดงผล" bottom sheet',
+    steps:['Processing completes','Bottom sheet with display options appears'],
+    expect:['All 11 options listed with icon + label','Sheet is scrollable if content overflows','Background image dimmed'] },
+
+  { id:'TC-08', screen:'S3', type:'positive',
+    title:'Select "ขายของสินค้า"', sub:'Default / first option in list',
+    steps:['Open mode picker','Tap "ขายของสินค้า"'],
+    expect:['Sheet closes','Product sales overlay renders on shelf image','Header subtitle updates to "ขายของสินค้า"'] },
+
+  { id:'TC-09', screen:'S3', type:'positive',
+    title:'Select "แผนภาพการจัดวางสินค้า"', sub:'Journey target — last item in list',
+    steps:['Open mode picker','Scroll to bottom','Tap "แผนภาพการจัดวางสินค้า"'],
+    expect:['Sheet closes','Planogram overlay renders on shelf image','Header shows "แผนภาพการจัดวางสินค้า ↓"','Color-coded shelf map displayed'] },
+
+  { id:'TC-10', screen:'S3', type:'positive',
+    title:'Select "สินค้าที่จัดแสดง"', sub:'Second option in picker',
+    steps:['Open mode picker','Tap "สินค้าที่จัดแสดง"'],
+    expect:['Displayed-products overlay renders','Header label updates accordingly'] },
+
+  { id:'TC-11', screen:'S3', type:'positive',
+    title:'Select "Arrangement"', sub:'English-label option in Thai list',
+    steps:['Open mode picker','Tap "Arrangement"'],
+    expect:['Arrangement view renders correctly','No locale/encoding issue with mixed-language label'] },
+
+  { id:'TC-12', screen:'S3', type:'edge',
+    title:'Dismiss picker without selection', sub:'Back gesture or tap outside sheet',
+    steps:['Open mode picker','Tap outside sheet or press back'],
+    expect:['Sheet closes','Previous screen state is preserved','No mode is applied','User can re-open picker'] },
+
+  { id:'TC-13', screen:'S3', type:'negative',
+    title:'Mode picker with no analysis result', sub:'Picker opened with empty/null result',
+    steps:['Analysis returns empty data','Mode picker is shown'],
+    expect:['Options still display','Selecting a mode shows empty-state message','No crash on null data'] },
+
+  { id:'TC-14', screen:'S4', type:'positive',
+    title:'Planogram overlay renders correctly', sub:'Color-coded map on shelf photo',
+    steps:['Select "แผนภาพการจัดวางสินค้า"','View result screen'],
+    expect:['Shelf image visible behind overlay','Product zones highlighted with correct colors','Legend/label visible','Header shows "แผนภาพการจัดวางสินค้า ↓"'] },
+
+  { id:'TC-15', screen:'S4', type:'positive',
+    title:'Switch mode from result screen', sub:'Change mode via header dropdown',
+    steps:['On result screen tap "แผนภาพการจัดวางสินค้า ↓" in header','Select a different mode'],
+    expect:['Mode picker re-opens','New mode overlay replaces current one','Header label updates'] },
+
+  { id:'TC-16', screen:'S4', type:'positive',
+    title:'Download photo from result screen', sub:'"ดาวน์โหลดรูปที่ 1-1" button',
+    steps:['On result screen','Tap download button'],
+    expect:['Image with overlay saved to device','Success confirmation shown','File accessible in device gallery'] },
+
+  { id:'TC-17', screen:'S4', type:'edge',
+    title:'Download fails — storage full', sub:'Device has no available storage',
+    steps:['Fill device storage to max','Attempt download on result screen'],
+    expect:['Error message shown (no crash)','User prompted to free up space'] },
+
+  { id:'TC-18', screen:'S4', type:'positive',
+    title:'Navigate back from result screen', sub:'Back arrow in header',
+    steps:['On result screen','Tap back arrow'],
+    expect:['Returns to image view (Screen 1)','No data loss or crash','Back stack is correct'] },
+
+  { id:'TC-19', screen:'S4', type:'edge',
+    title:'Planogram on low-res / blurry image', sub:'Image quality impacts AI detection',
+    steps:['Open shelf with a blurry/low-res photo','Trigger X-ray and select Planogram mode'],
+    expect:['Overlay still renders (even if partial)','Low-confidence indication shown if applicable','No crash or blank screen'] },
+
+  { id:'TC-20', screen:'S1', type:'negative',
+    title:'Open empty shelf (no photos)', sub:'Record exists but no image attached',
+    steps:['Navigate to shelf with 0 photos','Open image view'],
+    expect:['Empty state illustration/message shown','X-ray button disabled or hidden','No crash'] },
+];
+
+const SCREEN_LABELS = { S1:'Screen 1', S2:'Screen 2', S3:'Screen 3', S4:'Screen 4' };
+const SCREEN_CLASSES = { S1:'sc-s1', S2:'sc-s2', S3:'sc-s3', S4:'sc-s4' };
+const SCREEN_NAMES   = { S1:'Image view', S2:'Trigger', S3:'Mode picker', S4:'Result' };
+
+let activeType = 'all';
+let activeScreen = 'all';
+let expandedId = null;
+
+function setFilter(dim, val, btn, activeClass) {
+  const group = dim === 'type' ? 'type-filters' : 'screen-filters';
+  document.querySelectorAll(`#${group} .filter-btn`).forEach(b => {
+    b.classList.remove('active','active-orange','active-green','active-amber','active-red','active-blue','active-purple');
+  });
+  btn.classList.add(activeClass);
+  if (dim === 'type') activeType = val;
+  else activeScreen = val;
+  applyFilters();
+}
+
+function applyFilters() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  const filtered = CASES.filter(c => {
+    const typeOk   = activeType   === 'all' || c.type   === activeType;
+    const screenOk = activeScreen === 'all' || c.screen === activeScreen;
+    const searchOk = !q || c.title.toLowerCase().includes(q)
+                       || c.sub.toLowerCase().includes(q)
+                       || c.id.toLowerCase().includes(q)
+                       || c.steps.some(s=>s.toLowerCase().includes(q))
+                       || c.expect.some(e=>e.toLowerCase().includes(q));
+    return typeOk && screenOk && searchOk;
+  });
+  renderTable(filtered);
+}
+
+function renderTable(list) {
+  const tbody = document.getElementById('tc-tbody');
+  document.getElementById('showing-count').textContent = `${list.length} / ${CASES.length}`;
+  document.getElementById('empty-state').style.display = list.length ? 'none' : 'block';
+
+  if (!list.length) { tbody.innerHTML = ''; return; }
+
+  tbody.innerHTML = list.map(c => {
+    const typePill  = `<span class="type-pill tp-${c.type}">${c.type === 'positive' ? 'Positive' : c.type === 'edge' ? 'Edge' : 'Negative'}</span>`;
+    const screenTag = `<span class="screen-tag ${SCREEN_CLASSES[c.screen]}">${SCREEN_LABELS[c.screen]}<br><small style="font-weight:400;opacity:0.75;">${SCREEN_NAMES[c.screen]}</small></span>`;
+    return `
+    <tr class="tc-row" id="row-${c.id}" onclick="toggleDetail('${c.id}')">
+      <td class="col-id"><span class="tc-id">${c.id}</span></td>
+      <td class="col-screen hide-sm">${screenTag}</td>
+      <td class="col-title">
+        <div class="tc-title-text">${c.title}</div>
+        <div class="tc-sub-text">${c.sub}</div>
+      </td>
+      <td class="col-type hide-sm">${typePill}</td>
+    </tr>
+    <tr class="detail-row" id="detail-${c.id}">
+      <td colspan="4" style="padding:0 0 8px 0;">
+        <div class="detail-inner">
+          <div>
+            <div class="detail-section-title">Steps to reproduce</div>
+            <ol class="detail-list steps-list">
+              ${c.steps.map((s,i)=>`<li><strong style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text3);margin-right:6px;">${i+1}.</strong>${s}</li>`).join('')}
+            </ol>
+          </div>
+          <div>
+            <div class="detail-section-title">Expected behavior</div>
+            <ul class="detail-list expect-list">
+              ${c.expect.map(e=>`<li>${e}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function toggleDetail(id) {
+  const detailRow = document.getElementById(`detail-${id}`);
+  const mainRow   = document.getElementById(`row-${id}`);
+  const isOpen = detailRow.classList.contains('open');
+  // close all
+  document.querySelectorAll('.detail-row.open').forEach(r => r.classList.remove('open'));
+  document.querySelectorAll('.tc-row.expanded').forEach(r => r.classList.remove('expanded'));
+  if (!isOpen) {
+    detailRow.classList.add('open');
+    mainRow.classList.add('expanded');
+    detailRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+function updateStats() {
+  document.getElementById('s-total').textContent = CASES.length;
+  document.getElementById('s-pos').textContent  = CASES.filter(c=>c.type==='positive').length;
+  document.getElementById('s-edge').textContent = CASES.filter(c=>c.type==='edge').length;
+  document.getElementById('s-neg').textContent  = CASES.filter(c=>c.type==='negative').length;
+}
+
+updateStats();
+renderTable(CASES);
+</script>
+</body>
+</html>
